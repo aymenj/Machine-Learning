@@ -17,15 +17,15 @@ public class LinearRegression {
 	
 	/**
 	 * Fit the Parameters using the Least-Square Method.
-	 * @param <T>
+	 * @param 
 	 */
-	public static void fit(double[][] X, double[] Y){
+	public static void fit(Double[][] X, Double[] Y){
 		int Nfeatures = X[0].length;
 		int Nobservations = X.length;
 		
-		double[] betas  = new double[Nfeatures+1];
-		double[] gradient = new double[Nfeatures+1];
-		double[] residuals = new double[Nobservations];
+		Double[] betas  = new Double[Nfeatures+1];
+		Double[] gradient = new Double[Nfeatures+1];
+		Double[] residuals = new Double[Nobservations];
 		
 		//Initialize Betas Randomly
 		Random random = new Random();
@@ -52,7 +52,7 @@ public class LinearRegression {
 			for(int l=0;l<gradient.length;++l){
 				double val = 0.0;
 				for(int i=0;i<Nobservations;++i){
-					if(i==0)
+					if(l==0)
 						val+= residuals[i];
 					else
 						val+= residuals[i]*X[i][l-1];
