@@ -6,13 +6,23 @@ import java.util.Random;
 public class LinearRegression {
 	
 	public static double learning_rate;
+	public static double error_lim;
 	
 	
 	/**
 	 * Constructor
 	 */
-	public LinearRegression(double learning_rate) {
+	public LinearRegression(double learning_rate,double error_lim) {
 		this.learning_rate = learning_rate;
+		this.error_lim = error_lim;
+	}
+	
+	/**
+	 * Constructor without initialization of the learning rate
+	 */
+	public LinearRegression() {
+		this.learning_rate = 0.0001;
+		this.error_lim = 0.001;
 	}
 	
 	/**
@@ -33,10 +43,11 @@ public class LinearRegression {
 			betas[l] = random.nextDouble();
 		
 		//Apply Gradient Descent
-		double error_lim = 0.001;
 		double SSE = 1.0;
 		double prev_SSE = 100.0;
 		double e = Math.abs((SSE-prev_SSE)/prev_SSE);
+		System.out.println("First error"+e);
+		int counter = 1;
 		while(e>error_lim){
 			//Evaluate residuals
 			
@@ -72,10 +83,18 @@ public class LinearRegression {
 				for(int j=0;j<Nfeatures;++j)
 					temp += betas[j+1]*X[i][j];
 				SSE += Math.pow(temp,2);
-			}	
+			}
+			
+			e = Math.abs((SSE-prev_SSE)/prev_SSE);
+			System.out.println("SSE at loop "+counter+" = "+SSE);
+			System.out.println("Relative Error at loop "+counter+" = "+e);
+			++counter;
 		}
-		System.out.println("Final Sum of Squared Error = "+SSE);
-		System.out.println(Arrays.toString(betas));
+		System.out.println("===============================");
+		System.out.println("Least Square Regression Results");
+		System.out.println("Coefficients Values = "+ Arrays.toString(betas));
+		System.out.println("Final SSE = "+SSE);
+		
 	}
 	
 }

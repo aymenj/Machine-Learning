@@ -38,6 +38,60 @@ public class Main {
     	return res;
     }
 
+    public static Double min(Double[][]A, int index){
+    	if(A.length==0) return Double.NaN;
+    	Double min=Double.POSITIVE_INFINITY;
+    	for(int i=0;i<A.length;++i){
+    		if(A[i][index]<min)
+    			min = A[i][index];
+    	}
+    	return min;	
+    }
+    
+    public static Double max(Double[][]A, int index){
+    	if(A.length==0) return Double.NaN;
+    	Double max=Double.NEGATIVE_INFINITY;
+    	for(int i=0;i<A.length;++i){
+    		if(A[i][index]>max)
+    			max = A[i][index];
+    	}
+    	return max;	
+    }
+    
+    public static Double mean(Double[][]A, int index){
+    	if(A.length==0) return Double.NaN;
+    	Double sum=0.0;
+    	for(int i=0;i<A.length;++i){
+    		sum += A[i][index];
+    	}
+    	return sum/A.length;
+    }
+    
+    public static Double var(Double[][]A, int index){
+    	if(A.length==0) return Double.NaN;
+    	Double avg=mean(A,index);
+    	Double sum = 0.0;
+    	for(int i=0;i<A.length;++i){
+    		sum += (A[i][index]-avg)*(A[i][index]-avg);
+    	}
+    	return sum/(A.length-1);
+    }
+    
+    public static Double std(Double[][]A, int index){
+    	return Math.sqrt(var(A,index));
+    }
+    
+    public static Double[][] normalize(Double[][] A){
+    	Double[][] Res = new Double[A.length][A[0].length];
+    	for(int j=0;j<A[0].length;++j){
+    		Double mean = mean(A, j);
+    		Double sd = std(A, j);
+    		for(int i=0;i<A.length;++i)
+    			Res[i][j] = (A[i][j]-mean)/sd;
+    	}
+    	return Res;
+    }
+    
 	public static void main(String[] args) throws FileNotFoundException {
 		
 		
@@ -59,14 +113,18 @@ public class Main {
 		for(int i=0;i<lines.size();++i)
 			array[i] = lines.get(i).toArray(blankArray);
 		
-		System.out.println(Arrays.deepToString(array));
+		//System.out.println(Arrays.deepToString(array));
 		
-		LinearRegression lr = new LinearRegression(0.0001);
+		LinearRegression lr = new LinearRegression();
 		
-		//Input and Taget Data
+		//Input and Target Data
 		int[] indices = {0,1};
 		Double[][] X = selectColumnsOnIndices(array, indices);
 		Double[] Y = selectColumnOnIndex(array, 2);
+		
+		X = normalize(X);
+		
+		System.out.println(Arrays.deepToString(X));
 		
 		lr.fit(X, Y);
 		
